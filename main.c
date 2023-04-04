@@ -11,8 +11,8 @@ int main(int argc, char* argv[]){
     conjugue("jouer");
     printf("%s\n", concat("Salut tu vas", "bien ?"));
     char c[20];
-    strcpy(c, "    salut   \0");
-    //trim("     salut    ");
+    strcpy(c, "    saluut   \0");
+    trim(c);
     printf("%s\n", c);
     printf("%d\n", exists("Chaine dans le texte", "dans"));
     return EXIT_SUCCESS;
@@ -30,7 +30,7 @@ void conjugue(char* verbe){
 
         // 2e personne du singulier
         conj[taille-1] = 's';
-        printf("Tu %s", conj);
+        printf("Tu %s\n", conj);
 
         // 3e personne du singulier
         conj[taille-1] = '\0';
@@ -65,12 +65,10 @@ char* concat(char* c1, char* c2){
 
     for(int i = 0; i < strlen(c1) / 2; i++){
         retour[i] = c1[i];
-        printf("%c\n", c1[i]);
     }
 
     for(int i = 0; i < strlen(c2) / 2; i++){
         retour[i + strlen(c1) / 2] = c2[strlen(c2) / 2 + i];
-        printf("%c\n", c2[strlen(c2) / 2 + i]);
     }
 
     retour[strlen(c1) / 2 + strlen(c2) / 2 + 1] = '\0';
@@ -80,36 +78,27 @@ char* concat(char* c1, char* c2){
 
 void trim(char* c){
     int n = 0;
-    int etat = 0;
     char copie[strlen(c)];
     for(int i = 0; i < strlen(c); i++){
-        if(!etat){
-            if(c[i] != ' ' && c[i] != '\n'){
-                etat = 1;
-                copie[n] = c[i];
-                n++;
-            }
-        } else {
-            copie[n] = c[i];
+        if(c[i] == ' ' || c[i] == '\n'){
             n++;
+        } else {
+            i = strlen(c);
         }
     }
 
-    int m = n;
-    for(int i = n; i > 0; i--){
-        printf("%c\n", c[i-1]);
+    int m = strlen(c);
+    for(int i = strlen(c); i > 0; i--){
         if(c[i-1] == ' ' || c[i-1] == '\n'){
             m--;
         } else {
-            m = 0;
+            i = 0;
         }
     }
 
-    printf("%d\n", n);
-
-    copie[n] = '\0';
-    memset(c, strlen(c), sizeof(char));
-    strncpy(c, copie, n);
+    
+    strncpy(copie, c + n * sizeof(char), m - n);
+    strcpy(c, copie);
 }
 
 int exists(char* c1, char* c2){
